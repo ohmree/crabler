@@ -25,7 +25,7 @@
 //!    }
 //!}
 //!
-//!#[tokio::main]
+//!#[async_std::main]
 //!async fn main() -> Result<()> {
 //!    let scraper = Scraper {};
 //!
@@ -40,6 +40,7 @@ use async_std::fs::File;
 use async_std::prelude::*;
 use async_std::sync::RwLock;
 use async_std::sync::{channel, Receiver, RecvError, Sender};
+use async_std::task;
 pub use crabquery::{Document, Element};
 use std::collections::HashSet;
 use std::error;
@@ -240,7 +241,7 @@ where
 
         let worker = Worker::new(visited_links, workload_rx, workoutput_tx);
 
-        tokio::spawn(async move {
+        task::spawn(async move {
             loop {
                 println!("🐿️ Starting http worker");
 
